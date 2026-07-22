@@ -1,0 +1,82 @@
+/* ==========================================================================
+   ExpenseTracker Pro — Design Tokens
+   ========================================================================== */
+:root {
+  /* Brand palette (from project blueprint) */
+  --color-primary: #2563EB;
+  --color-primary-dark: #1D4ED8;
+  --color-primary-light: #DBEAFE;
+  --color-success: #22C55E;
+  --color-success-light: #DCFCE7;
+  --color-danger: #EF4444;
+  --color-danger-light: #FEE2E2;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FEF3C7;
+
+  /* Neutral scale */
+  --color-bg: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-border: #E2E8F0;
+  --color-text: #0F172A;
+  --color-text-muted: #64748B;
+  --color-text-faint: #94A3B8;
+
+  /* Bootstrap bridge */
+  --bs-body-bg: var(--color-bg);
+  --bs-body-color: var(--color-text);
+  --bs-secondary-color: var(--color-text-muted);
+  --bs-border-color: var(--color-border);
+
+  /* Sidebar */
+  --sidebar-bg: #0F172A;
+  --sidebar-text: #CBD5E1;
+  --sidebar-text-active: #FFFFFF;
+  --sidebar-hover: #1E293B;
+
+  /* Typography */
+  --font-display: 'Poppins', sans-serif;
+  --font-body: 'Poppins', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  --fs-h1: 1.75rem;
+  --fs-h2: 1.375rem;
+  --fs-h3: 1.125rem;
+  --fs-body: 0.9375rem;
+  --fs-caption: 0.8125rem;
+
+  /* Radii & shadow */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 14px rgba(15, 23, 42, 0.05);
+  --shadow-card-hover: 0 8px 24px rgba(15, 23, 42, 0.09);
+
+  /* Layout */
+  --sidebar-width: 240px;
+  --topbar-height: 68px;
+
+  --transition: 180ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Dark theme overrides */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #0B1220;
+  --color-surface: #131B2E;
+  --color-border: #223047;
+  --color-text: #E9EDF5;
+  --color-text-muted: #9AA7BD;
+  --color-text-faint: #6B7891;
+
+  --color-primary-light: #16233F;
+  --color-success-light: #12291D;
+  --color-danger-light: #2E1518;
+  --color-warning-light: #2C2110;
+
+  --sidebar-bg: #070C16;
+  --sidebar-hover: #131B2E;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 14px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.4);
+}

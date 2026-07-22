@@ -1,0 +1,47 @@
+/* ==========================================================================
+   ExpenseTracker Pro — Responsive
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-backdrop.open { display: block; }
+  .main { margin-left: 0; }
+  .menu-toggle { display: inline-flex; align-items: center; justify-content: center; }
+}
+
+@media (max-width: 767px) {
+  .content { padding: 16px; }
+  .topbar { padding: 0 16px; }
+  .stat-card .stat-value { font-size: 1.35rem; }
+  .card-body { padding: 16px; }
+  .table thead { display: none; }
+  .table.table-mobile-cards tbody tr {
+    display: block;
+    border-bottom: 8px solid var(--color-bg);
+  }
+  .table.table-mobile-cards tbody td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--color-border);
+    padding: 8px 4px;
+  }
+  .table.table-mobile-cards tbody td::before {
+    content: attr(data-label);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+  .table.table-mobile-cards tbody td:last-child { border-bottom: none; }
+}
+
+@media (max-width: 480px) {
+  .topbar-title small { display: none; }
+  .toast-stack { left: 12px; right: 12px; bottom: 12px; }
+  .toast-item { min-width: 0; width: 100%; }
+}

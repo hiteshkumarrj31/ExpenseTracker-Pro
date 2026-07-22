@@ -1,0 +1,14 @@
+/* Reports page specific styles */
+.period-btn.active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+@media print {
+  .no-print, .sidebar, .topbar, .sidebar-backdrop { display: none !important; }
+  .main { margin-left: 0 !important; }
+  body { background: #fff; }
+  .card { box-shadow: none; border: 1px solid #ddd; }
+  .d-print-block { display: block !important; }
+}

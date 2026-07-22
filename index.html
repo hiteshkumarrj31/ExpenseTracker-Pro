@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExpenseTracker Pro — Know where every rupee goes</title>
+<meta name="description" content="A clean, fast, offline-first expense tracker. Add income and expenses, see your spending patterns, and stay in control of your money.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="css/variables.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+<style>
+  body { background: var(--color-bg); }
+  .landing-nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 6vw;
+  }
+  .landing-nav .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; }
+  .landing-nav .brand .mark {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--color-primary), #60A5FA);
+    display: flex; align-items: center; justify-content: center; color: #fff;
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 6vw 80px;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--color-primary-light); color: var(--color-primary);
+    padding: 6px 14px; border-radius: 999px; font-size: 0.8rem; font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    margin-bottom: 18px;
+  }
+  .hero h1 .accent { color: var(--color-primary); }
+  .hero p.lead-text { color: var(--color-text-muted); font-size: 1.05rem; max-width: 480px; margin-bottom: 28px; }
+  .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-stats { display: flex; gap: 28px; margin-top: 36px; }
+  .hero-stats div strong { display: block; font-family: var(--font-display); font-size: 1.3rem; }
+  .hero-stats div span { color: var(--color-text-muted); font-size: 0.8rem; }
+
+  /* Signature element: live mock dashboard preview with animated ticking balance */
+  .preview-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card-hover);
+    padding: 22px;
+    transform: rotate(1.2deg);
+  }
+  .preview-card .preview-inner { transform: rotate(-1.2deg); }
+  .preview-balance-label { color: var(--color-text-muted); font-size: 0.8rem; }
+  .preview-balance-value { font-family: var(--font-display); font-size: 2.1rem; font-weight: 700; letter-spacing: -0.01em; }
+  .preview-bars { display: flex; align-items: flex-end; gap: 6px; height: 90px; margin: 18px 0; }
+  .preview-bars div { flex: 1; border-radius: 4px 4px 0 0; background: var(--color-primary); opacity: 0.85; transition: height 700ms ease; }
+  .preview-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px dashed var(--color-border); font-size: 0.85rem; }
+  .preview-row:last-child { border-bottom: none; }
+
+  .features-section { padding: 40px 6vw 90px; max-width: 1280px; margin: 0 auto; }
+  .section-eyebrow { color: var(--color-primary); font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+  .feature-card { padding: 24px; height: 100%; }
+  .feature-card .stat-icon { margin-bottom: 14px; }
+
+  .cta-banner {
+    margin: 0 6vw 60px; padding: 46px 40px; border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--color-primary), #1D4ED8);
+    color: #fff; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;
+  }
+  .cta-banner h2 { color: #fff; }
+  .cta-banner p { color: rgba(255,255,255,0.85); margin: 6px 0 0; }
+
+  .landing-footer { padding: 26px 6vw; color: var(--color-text-muted); font-size: 0.85rem; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; border-top: 1px solid var(--color-border); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-ctas { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="landing-nav">
+  <div class="brand">
+    <span class="mark"><i class="bi bi-wallet2"></i></span>
+    ExpenseTracker <span class="text-muted" style="font-weight:400">Pro</span>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+    <button class="icon-btn" id="quickThemeToggle" title="Toggle dark mode"><i class="bi bi-moon-stars"></i></button>
+    <a href="pages/dashboard.html" class="btn btn-primary text-white">Open App <i class="bi bi-arrow-right ms-1"></i></a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div>
+    <span class="hero-eyebrow"><i class="bi bi-shield-check"></i> 100% offline · your data stays on your device</span>
+    <h1>Know exactly where <span class="accent">every rupee</span> goes.</h1>
+    <p class="lead-text">Log income and expenses in seconds, see spending patterns before they surprise you, and build a savings habit that actually sticks — no sign-up, no server, no ads.</p>
+    <div class="hero-ctas">
+      <a href="pages/dashboard.html" class="btn btn-primary text-white btn-lg px-4">Start tracking free</a>
+      <a href="#features" class="btn btn-outline-secondary btn-lg px-4">See what's inside</a>
+    </div>
+    <div class="hero-stats">
+      <div><strong>₹0</strong><span>cost, forever</span></div>
+      <div><strong>0</strong><span>data leaves your browser</span></div>
+      <div><strong>6+</strong><span>chart & report views</span></div>
+    </div>
+  </div>
+
+  <div class="preview-card">
+    <div class="preview-inner">
+      <div class="preview-balance-label">Total Balance</div>
+      <div class="preview-balance-value mono" id="previewBalance">₹0.00</div>
+      <div class="preview-bars" id="previewBars"></div>
+      <div class="preview-row"><span><i class="bi bi-cup-hot text-warning"></i> Food</span><span class="mono">− ₹1,240.00</span></div>
+      <div class="preview-row"><span><i class="bi bi-cash-stack text-success"></i> Salary</span><span class="mono">+ ₹45,000.00</span></div>
+      <div class="preview-row"><span><i class="bi bi-house-door text-primary"></i> Rent</span><span class="mono">− ₹12,000.00</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="features-section" id="features">
+  <div class="section-eyebrow">What you get</div>
+  <h2 class="mb-4" style="font-size:1.8rem">Everything you need, nothing you don't</h2>
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card feature-card">
+        <div class="stat-icon bg-primary-soft" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="bi bi-speedometer2"></i></div>
+        <h3>Live Dashboard</h3>
+        <p class="text-muted mb-0">Balance, income, expenses and savings at a glance — updated the moment you log a transaction.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card feature-card">
+        <div class="stat-icon bg-success-soft" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="bi bi-pie-chart"></i></div>
+        <h3>Deep Analytics</h3>
+        <p class="text-muted mb-0">Pie, bar, line and doughnut views break down exactly where your money is going each month.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card feature-card">
+        <div class="stat-icon bg-warning-soft" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="bi bi-file-earmark-arrow-down"></i></div>
+        <h3>Reports & Export</h3>
+        <p class="text-muted mb-0">Generate daily, weekly, monthly or custom-range reports. Export to CSV or print to PDF.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card feature-card">
+        <div class="stat-icon bg-primary-soft" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="bi bi-tags"></i></div>
+        <h3>Custom Categories</h3>
+        <p class="text-muted mb-0">Start with sensible defaults for income and expenses, or add your own with custom colors and icons.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card feature-card">
+        <div class="stat-icon bg-success-soft" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="bi bi-moon-stars"></i></div>
+        <h3>Light, Dark & Auto</h3>
+        <p class="text-muted mb-0">A theme that's easy on the eyes any time of day, plus INR, USD and EUR currency support.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card feature-card">
+        <div class="stat-icon bg-warning-soft" style="width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center"><i class="bi bi-shield-lock"></i></div>
+        <h3>Private by Design</h3>
+        <p class="text-muted mb-0">Everything lives in your browser's local storage. Back up or restore as a JSON file whenever you like.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="cta-banner">
+  <div>
+    <h2>Ready to see where your money goes?</h2>
+    <p>Takes less than a minute to log your first transaction.</p>
+  </div>
+  <a href="pages/dashboard.html" class="btn btn-light text-primary btn-lg px-4 fw-semibold">Open Dashboard <i class="bi bi-arrow-right ms-1"></i></a>
+</div>
+
+<footer class="landing-footer">
+  <span>© <span class="js-year"></span> ExpenseTracker Pro. Built for learning &amp; portfolio use.</span>
+  <span><a href="pages/about.html" class="text-muted">About this project</a></span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/helper.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/app.js"></script>
+<script>
+  // Signature hero element: animate mock bars + count up a sample balance
+  (function () {
+    const bars = document.getElementById('previewBars');
+    const heights = [30, 55, 40, 70, 50, 85, 60];
+    heights.forEach((h) => {
+      const bar = document.createElement('div');
+      bar.style.height = '4px';
+      bars.appendChild(bar);
+      requestAnimationFrame(() => setTimeout(() => { bar.style.height = h + '%'; }, 120));
+    });
+
+    const target = 31760;
+    const el = document.getElementById('previewBalance');
+    let current = 0;
+    const step = () => {
+      current += target / 40;
+      if (current >= target) { el.textContent = Helper.formatAmount(target); return; }
+      el.textContent = Helper.formatAmount(current);
+      requestAnimationFrame(step);
+    };
+    step();
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "transactions": [
+    { "id": "txn_sample1", "date": "2026-07-01", "time": "09:00", "type": "income", "category": "salary", "amount": 45000, "note": "July salary", "paymentMethod": "Bank Transfer", "createdAt": "2026-07-01T09:00:00.000Z" },
+    { "id": "txn_sample2", "date": "2026-07-02", "time": "13:15", "type": "expense", "category": "rent", "amount": 12000, "note": "Monthly rent", "paymentMethod": "Bank Transfer", "createdAt": "2026-07-02T13:15:00.000Z" },
+    { "id": "txn_sample3", "date": "2026-07-03", "time": "19:30", "type": "expense", "category": "food", "amount": 640, "note": "Groceries", "paymentMethod": "UPI", "createdAt": "2026-07-03T19:30:00.000Z" },
+    { "id": "txn_sample4", "date": "2026-07-05", "time": "20:00", "type": "expense", "category": "entertainment", "amount": 500, "note": "Movie night", "paymentMethod": "Card", "createdAt": "2026-07-05T20:00:00.000Z" },
+    { "id": "txn_sample5", "date": "2026-07-08", "time": "11:00", "type": "expense", "category": "travel", "amount": 1800, "note": "Cab + train", "paymentMethod": "UPI", "createdAt": "2026-07-08T11:00:00.000Z" },
+    { "id": "txn_sample6", "date": "2026-07-10", "time": "16:45", "type": "income", "category": "freelance", "amount": 8000, "note": "Logo design gig", "paymentMethod": "UPI", "createdAt": "2026-07-10T16:45:00.000Z" },
+    { "id": "txn_sample7", "date": "2026-07-12", "time": "18:20", "type": "expense", "category": "bills", "amount": 1450, "note": "Electricity bill", "paymentMethod": "Card", "createdAt": "2026-07-12T18:20:00.000Z" },
+    { "id": "txn_sample8", "date": "2026-07-15", "time": "12:00", "type": "expense", "category": "shopping", "amount": 2200, "note": "New shoes", "paymentMethod": "Card", "createdAt": "2026-07-15T12:00:00.000Z" }
+  ],
+  "settings": { "theme": "light", "currency": "INR" },
+  "version": "1.0"
+}

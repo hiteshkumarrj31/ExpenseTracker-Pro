@@ -1,0 +1,21 @@
+{
+  "income": [
+    { "id": "salary", "name": "Salary", "icon": "bi-cash-stack", "color": "#22C55E" },
+    { "id": "business", "name": "Business", "icon": "bi-briefcase", "color": "#2563EB" },
+    { "id": "freelance", "name": "Freelance", "icon": "bi-laptop", "color": "#8B5CF6" },
+    { "id": "investment", "name": "Investment", "icon": "bi-graph-up-arrow", "color": "#0EA5E9" },
+    { "id": "gift", "name": "Gift", "icon": "bi-gift", "color": "#EC4899" },
+    { "id": "other-income", "name": "Other", "icon": "bi-three-dots", "color": "#64748B" }
+  ],
+  "expense": [
+    { "id": "food", "name": "Food", "icon": "bi-cup-hot", "color": "#F59E0B" },
+    { "id": "travel", "name": "Travel", "icon": "bi-airplane", "color": "#0EA5E9" },
+    { "id": "shopping", "name": "Shopping", "icon": "bi-bag", "color": "#EC4899" },
+    { "id": "rent", "name": "Rent", "icon": "bi-house-door", "color": "#8B5CF6" },
+    { "id": "bills", "name": "Bills", "icon": "bi-receipt", "color": "#EF4444" },
+    { "id": "education", "name": "Education", "icon": "bi-book", "color": "#2563EB" },
+    { "id": "health", "name": "Health", "icon": "bi-heart-pulse", "color": "#22C55E" },
+    { "id": "entertainment", "name": "Entertainment", "icon": "bi-film", "color": "#F97316" },
+    { "id": "other-expense", "name": "Other", "icon": "bi-three-dots", "color": "#64748B" }
+  ]
+}

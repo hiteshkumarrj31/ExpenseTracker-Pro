@@ -1,0 +1,2 @@
+/* Transactions page specific styles */
+#txnTableBody tr td:last-child { min-width: 84px; }

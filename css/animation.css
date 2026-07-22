@@ -1,0 +1,10 @@
+/* Small reusable animation utilities */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in-up { animation: fadeInUp 300ms ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-up { animation: none; }
+}

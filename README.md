@@ -60,4 +60,4 @@ Every transaction, category and setting is stored in your browser's `localStorag
 
 ## 📄 License
 
-MIT — free to use for learning, portfolio, and placement purposes.
+MIT — free to use for learning

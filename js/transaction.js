@@ -136,6 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderTable() {
+    if (!tbody) return;
+    
     const list = getFiltered();
     if (resultCount) resultCount.textContent = `${list.length} transaction${list.length === 1 ? '' : 's'}`;
 

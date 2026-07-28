@@ -136,16 +136,16 @@
   <!-- Standalone App Redirect -->
   <script>
     function redirectIfStandalone() {
-      const isCapacitorAndroid = location.protocol === 'http:' && location.hostname === 'localhost' && location.port === '';
-      const isCapacitor = (window.Capacitor && window.Capacitor.isNative) || isCapacitorAndroid;
+      const isCapacitor = (typeof window.Capacitor !== 'undefined') || (location.hostname === 'localhost');
       const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || isCapacitor;
-      if (isStandalone) {
-        window.location.replace(isCapacitor ? 'pages/dashboard.html' : 'pages/dashboard');
+      if (isStandalone && location.pathname.endsWith('index.html') || location.pathname === '/' || location.pathname === '') {
+        const dest = isCapacitor ? '/pages/dashboard.html' : '/pages/dashboard';
+        window.location.replace(window.location.origin + dest);
       }
     }
     redirectIfStandalone();
     document.addEventListener("DOMContentLoaded", redirectIfStandalone);
-    setTimeout(redirectIfStandalone, 100);
+    setTimeout(redirectIfStandalone, 500);
   </script>
 
 <link rel="manifest" href="manifest.json">

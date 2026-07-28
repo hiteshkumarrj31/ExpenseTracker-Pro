@@ -8,6 +8,7 @@ const DB = (function () {
     TRANSACTIONS: 'etp_transactions',
     CATEGORIES: 'etp_categories',
     SETTINGS: 'etp_settings',
+    RECURRING: 'etp_recurring',
   };
 
   const DEFAULT_CATEGORIES = {
@@ -36,6 +37,7 @@ const DB = (function () {
     theme: 'light',
     currency: 'INR',
     pinCode: '',
+    monthlyBudget: 0,
   };
 
   function safeGet(key, fallback) {
@@ -156,6 +158,29 @@ const DB = (function () {
     return (cats[type] || []).find((c) => c.id === id) || { id, name: id, icon: 'bi-tag', color: '#64748B' };
   }
 
+  // ---------------- Recurring ----------------
+  function getRecurring() {
+    return safeGet(KEYS.RECURRING, []);
+  }
+
+  function addRecurring(rule) {
+    const rules = getRecurring();
+    const newRule = { ...rule, id: 'rec_' + Date.now().toString(36) };
+    rules.push(newRule);
+    safeSet(KEYS.RECURRING, rules);
+    return newRule;
+  }
+
+  function deleteRecurring(id) {
+    const rules = getRecurring().filter((r) => r.id !== id);
+    safeSet(KEYS.RECURRING, rules);
+  }
+
+  function updateRecurring(id, data) {
+    const rules = getRecurring().map((r) => (r.id === id ? { ...r, ...data } : r));
+    safeSet(KEYS.RECURRING, rules);
+  }
+
   // ---------------- Settings ----------------
   function getSettings() {
     return safeGet(KEYS.SETTINGS, DEFAULT_SETTINGS);
@@ -178,6 +203,7 @@ const DB = (function () {
       transactions: getTransactions(),
       categories: getCategories(),
       settings: getSettings(),
+      recurring: getRecurring(),
       exportedAt: new Date().toISOString(),
       version: '1.0',
     };
@@ -187,6 +213,7 @@ const DB = (function () {
     if (!data || typeof data !== 'object') throw new Error('Invalid backup file');
     if (Array.isArray(data.transactions)) saveTransactions(data.transactions);
     if (data.categories) saveCategories(data.categories);
+    if (data.recurring) safeSet(KEYS.RECURRING, data.recurring);
     if (data.settings) saveSettings(data.settings);
     return true;
   }
@@ -195,6 +222,7 @@ const DB = (function () {
     localStorage.removeItem(KEYS.TRANSACTIONS);
     localStorage.removeItem(KEYS.CATEGORIES);
     localStorage.removeItem(KEYS.SETTINGS);
+    localStorage.removeItem(KEYS.RECURRING);
     init();
   }
 
@@ -213,6 +241,10 @@ const DB = (function () {
     addCategory,
     deleteCategory,
     findCategory,
+    getRecurring,
+    addRecurring,
+    updateRecurring,
+    deleteRecurring,
     getSettings,
     saveSettings,
     updateSetting,

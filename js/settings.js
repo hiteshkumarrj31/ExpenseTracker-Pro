@@ -32,9 +32,31 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.currency-option').forEach((o) => o.classList.remove('active'));
       el.classList.add('active');
       DB.updateSetting('currency', el.dataset.currency);
+      document.querySelectorAll('.currency-symbol-addon').forEach(addon => {
+        addon.textContent = Helper.currencySymbol();
+      });
       Helper.toast(`Currency set to ${el.dataset.currency}`, 'success');
     });
   });
+
+  // ---------------- Budget ----------------
+  const budgetInput = document.getElementById('budgetInput');
+  const saveBudgetBtn = document.getElementById('saveBudgetBtn');
+  
+  if (budgetInput && saveBudgetBtn) {
+    budgetInput.value = settings.monthlyBudget || '';
+    
+    // Update currency symbol dynamically
+    document.querySelectorAll('.currency-symbol-addon').forEach(el => {
+      el.textContent = Helper.currencySymbol();
+    });
+    
+    saveBudgetBtn.addEventListener('click', () => {
+      const val = Number(budgetInput.value) || 0;
+      DB.updateSetting('monthlyBudget', val);
+      Helper.toast(val > 0 ? `Monthly budget set to ${Helper.formatAmount(val)}` : 'Monthly budget removed', 'success');
+    });
+  }
 
   // ---------------- Security (PIN) ----------------
   const setPinBtn = document.getElementById('setPinBtn');
@@ -78,11 +100,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updatePinUI();
 
-  // ---------------- Backup ----------------
+  // ---------------- Backup & Export ----------------
   document.getElementById('backupBtn')?.addEventListener('click', () => {
     const data = DB.exportAllData();
     Exporter.downloadJSON(data, `expense-tracker-backup-${Helper.todayISO()}.json`);
     Helper.toast('Backup downloaded', 'success');
+  });
+
+  document.getElementById('exportCsvBtn')?.addEventListener('click', () => {
+    const txns = DB.getTransactions();
+    Exporter.downloadCSV(txns, `expense-tracker-export-${Helper.todayISO()}.csv`);
+    Helper.toast('CSV Export downloaded', 'success');
   });
 
   // ---------------- Restore ----------------

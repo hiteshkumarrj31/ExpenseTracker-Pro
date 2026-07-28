@@ -26,6 +26,7 @@
       <div class="sidebar-section-label">Menu</div>
       <a href="dashboard.html" class="sidebar-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
       <a href="transactions.html" class="sidebar-link"><i class="bi bi-arrow-left-right"></i> Transactions</a>
+      <a href="subscriptions.html" class="sidebar-link"><i class="bi bi-calendar-repeat"></i> Subscriptions</a>
       <a href="analytics.html" class="sidebar-link"><i class="bi bi-bar-chart"></i> Analytics</a>
       <a href="reports.html" class="sidebar-link"><i class="bi bi-file-earmark-text"></i> Reports</a>
       <a href="categories.html" class="sidebar-link"><i class="bi bi-tags"></i> Categories</a>
@@ -82,6 +83,20 @@
 
       <div class="card mb-3">
         <div class="card-body">
+          <h2 class="mb-1">Monthly Budget</h2>
+          <p class="text-muted mb-3" style="font-size:.85rem">Set a limit to track your spending on the dashboard.</p>
+          <div class="d-flex gap-2 align-items-center" style="max-width:300px">
+            <div class="input-group">
+              <span class="input-group-text currency-symbol-addon">₹</span>
+              <input type="number" id="budgetInput" class="form-control" placeholder="0 for no limit">
+            </div>
+            <button class="btn btn-primary text-white" id="saveBudgetBtn">Save</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3">
+        <div class="card-body">
           <h2 class="mb-1">Currency</h2>
           <p class="text-muted mb-3" style="font-size:.85rem">Applies to all amounts shown across the app.</p>
           <div class="row g-3">
@@ -129,7 +144,8 @@
           <h2 class="mb-1">Data</h2>
           <p class="text-muted mb-3" style="font-size:.85rem">Everything is stored locally in this browser. Back up regularly.</p>
           <div class="d-flex flex-wrap gap-2">
-            <button class="btn btn-light-soft" id="backupBtn"><i class="bi bi-download"></i> Backup Data (JSON)</button>
+            <button class="btn btn-light-soft" id="backupBtn"><i class="bi bi-file-earmark-code"></i> Backup (JSON)</button>
+            <button class="btn btn-light-soft" id="exportCsvBtn"><i class="bi bi-file-earmark-spreadsheet"></i> Export (CSV)</button>
             <button class="btn btn-light-soft" id="restoreBtn"><i class="bi bi-upload"></i> Restore from Backup</button>
             <input type="file" id="restoreInput" accept="application/json" hidden>
             <button class="btn btn-outline-secondary" style="border-color:var(--color-danger); color:var(--color-danger)" id="resetBtn"><i class="bi bi-exclamation-triangle"></i> Reset All Data</button>
@@ -144,6 +160,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="../js/storage.js"></script>
 <script src="../js/auth.js"></script>
+<script src="../js/recurring.js"></script>
 <script src="../js/helper.js"></script>
 <script src="../js/theme.js"></script>
 <script src="../js/app.js"></script>

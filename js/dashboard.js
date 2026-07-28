@@ -14,6 +14,44 @@ document.addEventListener('DOMContentLoaded', () => {
     return { income, expense, balance: income - expense, savings: Math.max(income - expense, 0) };
   }
 
+  function renderBudget(monthTotals) {
+    const budgetContainer = document.getElementById('budgetCardContainer');
+    if (!budgetContainer) return;
+    
+    const budget = DB.getSettings().monthlyBudget || 0;
+    if (budget <= 0) {
+      budgetContainer.classList.add('d-none');
+      return;
+    }
+    
+    budgetContainer.classList.remove('d-none');
+    
+    const spent = monthTotals.expense;
+    const percent = Math.min(Math.round((spent / budget) * 100), 100);
+    const remaining = budget - spent;
+    
+    document.getElementById('budgetSpent').textContent = Helper.formatAmount(spent);
+    document.getElementById('budgetTotal').textContent = Helper.formatAmount(budget);
+    document.getElementById('budgetPercentage').textContent = percent + '%';
+    
+    const remainingText = remaining >= 0 ? `${Helper.formatAmount(remaining)} remaining` : `${Helper.formatAmount(Math.abs(remaining))} over budget`;
+    document.getElementById('budgetRemainingText').textContent = remainingText;
+    
+    const progressBar = document.getElementById('budgetProgressBar');
+    progressBar.style.width = percent + '%';
+    
+    if (percent >= 90) {
+      progressBar.style.backgroundColor = 'var(--color-danger)';
+      document.getElementById('budgetPercentage').style.color = 'var(--color-danger)';
+    } else if (percent >= 75) {
+      progressBar.style.backgroundColor = 'var(--color-warning)';
+      document.getElementById('budgetPercentage').style.color = 'var(--color-warning)';
+    } else {
+      progressBar.style.backgroundColor = 'var(--color-primary)';
+      document.getElementById('budgetPercentage').style.color = 'var(--color-primary)';
+    }
+  }
+
   function renderStats() {
     const all = DB.getTransactions();
     const monthly = Helper.filterByPeriod(all, 'month');
@@ -30,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savingsDelta) {
       savingsDelta.textContent = monthTotals.income > 0 ? `${rate}% of this month's income saved` : 'Add income to see savings rate';
     }
+    
+    renderBudget(monthTotals);
   }
 
   function last6MonthsLabels() {

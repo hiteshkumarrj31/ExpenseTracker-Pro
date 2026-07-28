@@ -99,6 +99,7 @@ const DB = (function () {
       amount: Math.abs(Number(txn.amount)) || 0,
       note: txn.note || '',
       paymentMethod: txn.paymentMethod || 'Cash',
+      receipt: txn.receipt || null,
       createdAt: new Date().toISOString(),
     };
     list.push(record);

@@ -28,10 +28,10 @@
   --bs-border-color: var(--color-border);
 
   /* Sidebar */
-  --sidebar-bg: #0F172A;
-  --sidebar-text: #CBD5E1;
-  --sidebar-text-active: #FFFFFF;
-  --sidebar-hover: #1E293B;
+  --sidebar-bg: var(--color-surface);
+  --sidebar-text: var(--color-text-muted);
+  --sidebar-text-active: var(--color-primary);
+  --sidebar-hover: var(--color-bg);
 
   /* Typography */
   --font-display: 'Poppins', sans-serif;
@@ -74,8 +74,8 @@
   --color-danger-light: #2E1518;
   --color-warning-light: #2C2110;
 
-  --sidebar-bg: #070C16;
-  --sidebar-hover: #131B2E;
+  --sidebar-bg: var(--color-surface);
+  --sidebar-hover: var(--color-bg);
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 14px rgba(0, 0, 0, 0.3);
   --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.4);

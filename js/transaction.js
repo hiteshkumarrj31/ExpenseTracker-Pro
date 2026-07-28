@@ -245,7 +245,15 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error(err);
           }
         } else {
-          Helper.toast('Sharing not supported on this browser', 'danger');
+          try {
+            const cat = DB.findCategory(txn.type, txn.category);
+            const typeStr = txn.type === 'income' ? 'Received' : 'Paid';
+            const text = `${typeStr} ${Helper.formatAmount(txn.amount)} for ${cat.name} on ${Helper.formatDateShort(txn.date)}.\n${txn.note ? 'Note: ' + txn.note : ''}\n- via ExpenseTracker Pro`;
+            await navigator.clipboard.writeText(text);
+            Helper.toast('Copied to clipboard instead (Sharing not supported)', 'success');
+          } catch (err) {
+            Helper.toast('Sharing not supported and clipboard failed', 'danger');
+          }
         }
       });
     });

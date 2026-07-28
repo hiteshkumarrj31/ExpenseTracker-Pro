@@ -76,7 +76,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .sidebar-brand .name {
   font-family: var(--font-display);
   font-weight: 600;
-  color: #fff;
+  color: var(--color-text);
   font-size: 1rem;
   line-height: 1.1;
 }
@@ -109,10 +109,10 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   transition: background var(--transition), color var(--transition);
 }
 .sidebar-link i { font-size: 1.05rem; width: 20px; text-align: center; }
-.sidebar-link:hover { background: var(--sidebar-hover); color: #fff; }
+.sidebar-link:hover { background: var(--sidebar-hover); color: var(--color-text); }
 .sidebar-link.active {
-  background: var(--color-primary);
-  color: #fff;
+  background: var(--color-primary-light);
+  color: var(--color-primary);
 }
 
 .sidebar-footer {

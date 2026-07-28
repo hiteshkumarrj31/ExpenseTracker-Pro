@@ -279,7 +279,22 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error sharing:', err);
       }
     } else {
-      Helper.toast('Sharing is not supported on this device/browser.', 'danger');
+      // Fallback: Copy to clipboard
+      try {
+        const all = DB.getTransactions();
+        const monthly = Helper.filterByPeriod(all, 'month');
+        const monthTotals = monthly.reduce((acc, t) => {
+          if (t.type === 'income') acc.income += Number(t.amount);
+          else acc.expense += Number(t.amount);
+          return acc;
+        }, { income: 0, expense: 0 });
+        const text = `My Financial Summary this month:\nIncome: ${Helper.formatAmount(monthTotals.income)}\nExpense: ${Helper.formatAmount(monthTotals.expense)}\n\nTracked via ExpenseTracker Pro!`;
+        
+        await navigator.clipboard.writeText(text);
+        Helper.toast('Copied to clipboard instead (Sharing not supported)', 'success');
+      } catch (err) {
+        Helper.toast('Sharing not supported and clipboard failed.', 'danger');
+      }
     }
   });
 });

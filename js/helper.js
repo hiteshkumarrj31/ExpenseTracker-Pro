@@ -4,7 +4,7 @@
    ========================================================================== */
 
 const Helper = (function () {
-  const CURRENCY_SYMBOLS = { INR: '₹', USD: '$', EUR: '€' };
+  const CURRENCY_SYMBOLS = { INR: '₹', USD: '$', EUR: '€', GBP: '£' };
 
   function currencySymbol() {
     const settings = DB.getSettings();

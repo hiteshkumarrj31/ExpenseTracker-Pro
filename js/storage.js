@@ -35,6 +35,7 @@ const DB = (function () {
   const DEFAULT_SETTINGS = {
     theme: 'light',
     currency: 'INR',
+    pinCode: '',
   };
 
   function safeGet(key, fallback) {

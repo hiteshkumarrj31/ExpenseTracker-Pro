@@ -36,6 +36,48 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // ---------------- Security (PIN) ----------------
+  const setPinBtn = document.getElementById('setPinBtn');
+  const removePinBtn = document.getElementById('removePinBtn');
+  const setPinText = document.getElementById('setPinText');
+
+  function updatePinUI() {
+    const hasPin = !!DB.getSettings().pinCode;
+    if (hasPin) {
+      setPinText.textContent = 'Change PIN';
+      removePinBtn.classList.remove('d-none');
+    } else {
+      setPinText.textContent = 'Set PIN Lock';
+      removePinBtn.classList.add('d-none');
+    }
+  }
+
+  setPinBtn?.addEventListener('click', async () => {
+    const pin = prompt('Enter a 4-digit PIN (e.g. 1234):');
+    if (pin === null) return;
+    if (!/^\d{4}$/.test(pin)) {
+      Helper.toast('PIN must be exactly 4 digits.', 'danger');
+      return;
+    }
+    DB.updateSetting('pinCode', pin);
+    updatePinUI();
+    Helper.toast('PIN has been set successfully.', 'success');
+  });
+
+  removePinBtn?.addEventListener('click', async () => {
+    const ok = await Helper.confirmDialog({
+      title: 'Remove PIN?',
+      message: 'Anyone with access to this device will be able to view your financial data.',
+      confirmText: 'Remove PIN'
+    });
+    if (!ok) return;
+    DB.updateSetting('pinCode', '');
+    updatePinUI();
+    Helper.toast('PIN has been removed.', 'success');
+  });
+
+  updatePinUI();
+
   // ---------------- Backup ----------------
   document.getElementById('backupBtn')?.addEventListener('click', () => {
     const data = DB.exportAllData();

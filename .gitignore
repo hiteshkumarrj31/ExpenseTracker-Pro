@@ -14,3 +14,5 @@ build/
 .agents/
 .codex/
 .git/
+node_modules/
+www/

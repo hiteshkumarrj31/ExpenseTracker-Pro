@@ -32,12 +32,19 @@ const APP_SHELL = [
   './js/settings.js',
   './js/export.js',
   './pages/dashboard.html',
+  './pages/dashboard',
   './pages/transactions.html',
+  './pages/transactions',
   './pages/analytics.html',
+  './pages/analytics',
   './pages/reports.html',
+  './pages/reports',
   './pages/categories.html',
+  './pages/categories',
   './pages/settings.html',
+  './pages/settings',
   './pages/about.html',
+  './pages/about',
   './assets/favicon/icon-192.png',
   './assets/favicon/icon-512.png',
 ];
@@ -78,7 +85,7 @@ self.addEventListener('fetch', (event) => {
             caches.open(CACHE_VERSION).then((cache) => cache.put(request, copy));
             return response;
           })
-          .catch(() => caches.match('./pages/dashboard.html'));
+          .catch(() => caches.match('./pages/dashboard'));
       })
     );
   } else {

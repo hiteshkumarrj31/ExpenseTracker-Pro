@@ -2,7 +2,7 @@
   "name": "ExpenseTracker Pro",
   "short_name": "ExpenseTracker",
   "description": "Track income and expenses, see spending patterns, and build a savings habit — fully offline.",
-  "start_url": "./pages/dashboard.html",
+  "start_url": "./pages/dashboard",
   "scope": "./",
   "id": "/",
   "display": "standalone",

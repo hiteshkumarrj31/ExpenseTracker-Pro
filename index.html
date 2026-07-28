@@ -132,6 +132,14 @@
   }
 }
 </script>
+
+  <!-- Standalone App Redirect -->
+  <script>
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || (window.Capacitor && window.Capacitor.isNative);
+    if (isStandalone) {
+      window.location.replace('pages/dashboard');
+    }
+  </script>
 </head>
 <body>
 
@@ -142,7 +150,7 @@
   </div>
   <div class="d-flex align-items-center gap-3">
     <button class="icon-btn" id="quickThemeToggle" title="Toggle dark mode"><i class="bi bi-moon-stars"></i></button>
-    <a href="pages/dashboard.html" class="btn btn-primary text-white">Open App <i class="bi bi-arrow-right ms-1"></i></a>
+    <a href="pages/dashboard" class="btn btn-primary text-white">Open App <i class="bi bi-arrow-right ms-1"></i></a>
   </div>
 </nav>
 
@@ -152,7 +160,7 @@
     <h1>Know exactly where <span class="accent">every rupee</span> goes.</h1>
     <p class="lead-text">Log income and expenses in seconds, see spending patterns before they surprise you, and build a savings habit that actually sticks — no sign-up, no server, no ads.</p>
     <div class="hero-ctas">
-      <a href="pages/dashboard.html" class="btn btn-primary text-white btn-lg px-4">Start tracking free</a>
+      <a href="pages/dashboard" class="btn btn-primary text-white btn-lg px-4">Start tracking free</a>
       <a href="#features" class="btn btn-outline-secondary btn-lg px-4">See what's inside</a>
     </div>
     <div class="hero-stats">
@@ -228,14 +236,14 @@
     <h2>Ready to see where your money goes?</h2>
     <p>Takes less than a minute to log your first transaction.</p>
   </div>
-  <a href="pages/dashboard.html" class="btn btn-light text-primary btn-lg px-4 fw-semibold">Open Dashboard <i class="bi bi-arrow-right ms-1"></i></a>
+  <a href="pages/dashboard" class="btn btn-light text-primary btn-lg px-4 fw-semibold">Open Dashboard <i class="bi bi-arrow-right ms-1"></i></a>
 </div>
 
 <footer class="landing-footer">
   <span>© <span class="js-year"></span> ExpenseTracker Pro. Built for learning &amp; portfolio use.</span>
   <span>
-    <a href="pages/privacy.html" class="text-muted me-3">Privacy Policy</a>
-    <a href="pages/about.html" class="text-muted">About this project</a>
+    <a href="pages/privacy" class="text-muted me-3">Privacy Policy</a>
+    <a href="pages/about" class="text-muted">About this project</a>
   </span>
 </footer>
 

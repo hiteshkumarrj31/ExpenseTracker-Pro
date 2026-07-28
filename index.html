@@ -136,11 +136,22 @@
   <!-- Standalone App Redirect -->
   <script>
     function redirectIfStandalone() {
-      const isCapacitor = (typeof window.Capacitor !== 'undefined') || (location.hostname === 'localhost');
-      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || isCapacitor;
-      if (isStandalone && location.pathname.endsWith('index.html') || location.pathname === '/' || location.pathname === '') {
-        const dest = isCapacitor ? '/pages/dashboard.html' : '/pages/dashboard';
-        window.location.replace(window.location.origin + dest);
+      const isGitHub = location.hostname.includes('github.io');
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
+      const isCapacitor = (typeof window.Capacitor !== 'undefined') || !isGitHub; // If not GitHub, assume Capacitor/Local
+      
+      if (isPWA || isCapacitor) {
+        const useHtmlExt = !isGitHub; // Only drop .html on GitHub Pages
+        const dest = useHtmlExt ? 'pages/dashboard.html' : 'pages/dashboard';
+        
+        // Check if we are currently on the index page
+        const path = location.pathname;
+        if (path.endsWith('index.html') || path.endsWith('/') || path === '') {
+           // Prevent infinite loops if Capacitor fallback happened
+           if (!path.includes('dashboard')) {
+               window.location.replace(dest);
+           }
+        }
       }
     }
     redirectIfStandalone();

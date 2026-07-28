@@ -135,11 +135,17 @@
 
   <!-- Standalone App Redirect -->
   <script>
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || (window.Capacitor && window.Capacitor.isNative);
-    if (isStandalone) {
-      const isCap = window.Capacitor && window.Capacitor.isNative;
-      window.location.replace(isCap ? 'pages/dashboard.html' : 'pages/dashboard');
+    function redirectIfStandalone() {
+      const isCapacitorAndroid = location.protocol === 'http:' && location.hostname === 'localhost' && location.port === '';
+      const isCapacitor = (window.Capacitor && window.Capacitor.isNative) || isCapacitorAndroid;
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || isCapacitor;
+      if (isStandalone) {
+        window.location.replace(isCapacitor ? 'pages/dashboard.html' : 'pages/dashboard');
+      }
     }
+    redirectIfStandalone();
+    document.addEventListener("DOMContentLoaded", redirectIfStandalone);
+    setTimeout(redirectIfStandalone, 100);
   </script>
 
 <link rel="manifest" href="manifest.json">

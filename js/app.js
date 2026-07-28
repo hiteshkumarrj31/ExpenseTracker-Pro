@@ -16,7 +16,8 @@ document.addEventListener('click', e => {
   if (!link) return;
   const href = link.getAttribute('href');
   if (href && !href.startsWith('http') && !href.startsWith('#') && !href.endsWith('/') && !href.endsWith('.html')) {
-    const isCapacitorOrLocal = location.protocol === 'file:' || (window.Capacitor && window.Capacitor.isNative);
+    const isCapacitorAndroid = location.protocol === 'http:' && location.hostname === 'localhost' && location.port === '';
+    const isCapacitorOrLocal = location.protocol === 'file:' || (window.Capacitor && window.Capacitor.isNative) || isCapacitorAndroid;
     if (isCapacitorOrLocal) {
       e.preventDefault();
       window.location.href = href + '.html';

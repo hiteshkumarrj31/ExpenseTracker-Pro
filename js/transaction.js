@@ -52,6 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
       form.elements['amount'].value = txn.amount;
       form.elements['note'].value = txn.note || '';
       form.elements['paymentMethod'].value = txn.paymentMethod || 'Cash';
+      currentReceipt = txn.receipt || null;
+      if (currentReceipt) {
+        document.getElementById('receiptPreview').src = currentReceipt;
+        document.getElementById('receiptPreviewContainer')?.classList.remove('d-none');
+      } else {
+        document.getElementById('receiptPreviewContainer')?.classList.add('d-none');
+        if (form.elements['receipt']) form.elements['receipt'].value = '';
+      }
     } else {
       editingId = null;
       modalTitle.textContent = 'Add Transaction';
@@ -59,9 +67,56 @@ document.addEventListener('DOMContentLoaded', () => {
       form.elements['time'].value = Helper.nowTime();
       form.elements['type'].value = 'expense';
       populateCategoryOptions();
+      currentReceipt = null;
+      document.getElementById('receiptPreviewContainer')?.classList.add('d-none');
+      if (form.elements['receipt']) form.elements['receipt'].value = '';
     }
     modal?.show();
   }
+
+  let currentReceipt = null;
+  const receiptInput = form?.elements['receipt'];
+  const receiptPreviewContainer = document.getElementById('receiptPreviewContainer');
+  const receiptPreview = document.getElementById('receiptPreview');
+  const removeReceiptBtn = document.getElementById('removeReceiptBtn');
+
+  receiptInput?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const img = new Image();
+      img.onload = () => {
+        const MAX_WIDTH = 600;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > MAX_WIDTH) {
+          height = Math.round((height * MAX_WIDTH) / width);
+          width = MAX_WIDTH;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        currentReceipt = canvas.toDataURL('image/jpeg', 0.5);
+        receiptPreview.src = currentReceipt;
+        receiptPreviewContainer.classList.remove('d-none');
+      };
+      img.src = ev.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  removeReceiptBtn?.addEventListener('click', () => {
+    currentReceipt = null;
+    if (receiptInput) receiptInput.value = '';
+    receiptPreviewContainer.classList.add('d-none');
+  });
 
   document.getElementById('addTxnBtn')?.addEventListener('click', () => openModal());
   document.getElementById('addIncomeQuick')?.addEventListener('click', () => { openModal(); form.elements['type'].value = 'income'; populateCategoryOptions(); });
@@ -77,6 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
       amount: form.elements['amount'].value,
       note: form.elements['note'].value.trim(),
       paymentMethod: form.elements['paymentMethod'].value,
+      receipt: currentReceipt,
     };
     const { valid, errors } = Validate.transaction(data);
     if (!valid) {
@@ -152,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const cat = DB.findCategory(t.type, t.category);
       const sign = t.type === 'income' ? '+' : '−';
       const cls = t.type === 'income' ? 'amount-in' : 'amount-out';
+      const receiptBtn = t.receipt ? `<button class="icon-btn btn-receipt" data-receipt="${t.receipt}" title="View Receipt" style="color:var(--color-primary)"><i class="bi bi-image"></i></button>` : '';
       return `
         <tr>
           <td data-label="Date">${Helper.formatDate(t.date)}<div class="text-faint" style="font-size:.72rem">${t.time || ''}</div></td>
@@ -164,13 +221,34 @@ document.addEventListener('DOMContentLoaded', () => {
           <td data-label="Method">${Helper.escapeHTML(t.paymentMethod)}</td>
           <td data-label="Amount" class="${cls} mono">${sign} ${Helper.formatAmount(t.amount)}</td>
           <td data-label="Actions" class="text-end">
-            <div class="row-actions d-inline-flex gap-1">
+            <div class="row-actions d-inline-flex gap-1 align-items-center">
+              <button class="icon-btn btn-share" data-id="${t.id}" title="Share"><i class="bi bi-share"></i></button>
+              ${receiptBtn}
               <button class="edit-btn" data-id="${t.id}" title="Edit"><i class="bi bi-pencil"></i></button>
               <button class="del-btn" data-id="${t.id}" title="Delete"><i class="bi bi-trash3"></i></button>
             </div>
           </td>
         </tr>`;
     }).join('');
+
+    tbody.querySelectorAll('.btn-share').forEach((btn) => {
+      btn.addEventListener('click', async () => {
+        const txn = DB.getTransactions().find((t) => t.id === btn.dataset.id);
+        if (!txn) return;
+        if (navigator.share) {
+          const cat = DB.findCategory(txn.type, txn.category);
+          const typeStr = txn.type === 'income' ? 'Received' : 'Paid';
+          const text = `${typeStr} ${Helper.formatAmount(txn.amount)} for ${cat.name} on ${Helper.formatDateShort(txn.date)}.\n${txn.note ? 'Note: ' + txn.note : ''}\n- via ExpenseTracker Pro`;
+          try {
+            await navigator.share({ title: 'Transaction Details', text: text });
+          } catch (err) {
+            console.error(err);
+          }
+        } else {
+          Helper.toast('Sharing not supported on this browser', 'danger');
+        }
+      });
+    });
 
     tbody.querySelectorAll('.edit-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -188,6 +266,37 @@ document.addEventListener('DOMContentLoaded', () => {
         window.dispatchEvent(new Event('etp:data-changed'));
       });
     });
+    tbody.querySelectorAll('.btn-receipt').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        showReceiptPreview(btn.dataset.receipt);
+      });
+    });
+  }
+
+  function showReceiptPreview(dataUrl) {
+    let previewModal = document.getElementById('receiptFullScreenModal');
+    if (!previewModal) {
+      previewModal = document.createElement('div');
+      previewModal.id = 'receiptFullScreenModal';
+      previewModal.innerHTML = `
+        <div class="modal fade" tabindex="-1">
+          <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content" style="background: transparent; border: none;">
+              <div class="modal-header border-0 justify-content-end p-0 pb-2">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="background-color: rgba(0,0,0,0.5); border-radius: 50%; padding: 0.8rem;"></button>
+              </div>
+              <div class="modal-body text-center p-0">
+                <img id="receiptFullScreenImg" src="" style="max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(previewModal);
+    }
+    document.getElementById('receiptFullScreenImg').src = dataUrl;
+    const modalInstance = new bootstrap.Modal(previewModal.querySelector('.modal'));
+    modalInstance.show();
   }
 
   const debouncedRender = Helper.debounce(renderTable, 200);

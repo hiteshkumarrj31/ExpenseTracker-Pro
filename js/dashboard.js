@@ -198,11 +198,50 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
             <div>
               <div style="font-weight:500">${Helper.escapeHTML(cat.name)}</div>
-              <div class="text-muted" style="font-size:.78rem">${Helper.formatDateShort(t.date)}${t.note ? ' • ' + Helper.escapeHTML(t.note) : ''}</div>
+              <div class="text-muted" style="font-size:.78rem">
+                ${Helper.formatDateShort(t.date)}${t.note ? ' • ' + Helper.escapeHTML(t.note) : ''}
+                ${t.receipt ? '<i class="bi bi-receipt text-primary ms-1" title="Has receipt"></i>' : ''}
+              </div>
             </div>
           </div>
           <div class="${cls} mono">${sign} ${Helper.formatAmount(t.amount)}</div>
         </div>`;
+    }).join('');
+  }
+
+  function renderGoalsWidget() {
+    const goalsRow = document.getElementById('dashboardGoalsRow');
+    const goalsContainer = document.getElementById('dashboardGoalsContainer');
+    if (!goalsRow || !goalsContainer) return;
+
+    const goals = DB.getGoals();
+    if (goals.length === 0) {
+      goalsRow.classList.add('d-none');
+      return;
+    }
+
+    goalsRow.classList.remove('d-none');
+    goalsContainer.innerHTML = goals.slice(0, 3).map(g => {
+      const current = g.currentAmount || 0;
+      const target = g.targetAmount;
+      const percent = Math.min(100, Math.round((current / target) * 100));
+      return `
+        <div class="col-md-4">
+          <div class="p-3" style="border:1px solid var(--color-border); border-radius:8px;">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <i class="bi ${g.icon}" style="color:${g.color}"></i>
+              <div class="fw-semibold" style="font-size:0.9rem">${Helper.escapeHTML(g.name)}</div>
+            </div>
+            <div class="progress mb-2" style="height:6px; background:var(--color-border);">
+              <div class="progress-bar" style="width:${percent}%; background:${g.color}"></div>
+            </div>
+            <div class="d-flex justify-content-between text-muted" style="font-size:0.75rem">
+              <span>${Helper.formatAmount(current)}</span>
+              <span>${percent}%</span>
+            </div>
+          </div>
+        </div>
+      `;
     }).join('');
   }
 
@@ -211,9 +250,36 @@ document.addEventListener('DOMContentLoaded', () => {
     renderTrendChart();
     renderPieChart();
     renderRecent();
+    renderGoalsWidget();
   }
 
   renderAll();
   window.addEventListener('etp:data-changed', renderAll);
   window.addEventListener('etp:theme-changed', renderAll);
+
+  // ---------------- Sharing ----------------
+  document.getElementById('shareDashboardBtn')?.addEventListener('click', async () => {
+    if (navigator.share) {
+      try {
+        const all = DB.getTransactions();
+        const monthly = Helper.filterByPeriod(all, 'month');
+        const monthTotals = monthly.reduce((acc, t) => {
+          if (t.type === 'income') acc.income += Number(t.amount);
+          else acc.expense += Number(t.amount);
+          return acc;
+        }, { income: 0, expense: 0 });
+        
+        const text = `My Financial Summary this month:\nIncome: ${Helper.formatAmount(monthTotals.income)}\nExpense: ${Helper.formatAmount(monthTotals.expense)}\n\nTracked via ExpenseTracker Pro!`;
+        
+        await navigator.share({
+          title: 'My Financial Summary',
+          text: text,
+        });
+      } catch (err) {
+        console.error('Error sharing:', err);
+      }
+    } else {
+      Helper.toast('Sharing is not supported on this device/browser.', 'danger');
+    }
+  });
 });

@@ -9,6 +9,7 @@ const DB = (function () {
     CATEGORIES: 'etp_categories',
     SETTINGS: 'etp_settings',
     RECURRING: 'etp_recurring',
+    GOALS: 'etp_goals',
   };
 
   const DEFAULT_CATEGORIES = {
@@ -181,6 +182,29 @@ const DB = (function () {
     safeSet(KEYS.RECURRING, rules);
   }
 
+  // ---------------- Goals ----------------
+  function getGoals() {
+    return safeGet(KEYS.GOALS, []);
+  }
+
+  function addGoal(goal) {
+    const goals = getGoals();
+    const newGoal = { ...goal, id: 'goal_' + Date.now().toString(36), currentAmount: goal.currentAmount || 0 };
+    goals.push(newGoal);
+    safeSet(KEYS.GOALS, goals);
+    return newGoal;
+  }
+
+  function updateGoal(id, data) {
+    const goals = getGoals().map((g) => (g.id === id ? { ...g, ...data } : g));
+    safeSet(KEYS.GOALS, goals);
+  }
+
+  function deleteGoal(id) {
+    const goals = getGoals().filter((g) => g.id !== id);
+    safeSet(KEYS.GOALS, goals);
+  }
+
   // ---------------- Settings ----------------
   function getSettings() {
     return safeGet(KEYS.SETTINGS, DEFAULT_SETTINGS);
@@ -204,6 +228,7 @@ const DB = (function () {
       categories: getCategories(),
       settings: getSettings(),
       recurring: getRecurring(),
+      goals: getGoals(),
       exportedAt: new Date().toISOString(),
       version: '1.0',
     };
@@ -214,6 +239,7 @@ const DB = (function () {
     if (Array.isArray(data.transactions)) saveTransactions(data.transactions);
     if (data.categories) saveCategories(data.categories);
     if (data.recurring) safeSet(KEYS.RECURRING, data.recurring);
+    if (data.goals) safeSet(KEYS.GOALS, data.goals);
     if (data.settings) saveSettings(data.settings);
     return true;
   }
@@ -223,6 +249,7 @@ const DB = (function () {
     localStorage.removeItem(KEYS.CATEGORIES);
     localStorage.removeItem(KEYS.SETTINGS);
     localStorage.removeItem(KEYS.RECURRING);
+    localStorage.removeItem(KEYS.GOALS);
     init();
   }
 
@@ -245,6 +272,10 @@ const DB = (function () {
     addRecurring,
     updateRecurring,
     deleteRecurring,
+    getGoals,
+    addGoal,
+    updateGoal,
+    deleteGoal,
     getSettings,
     saveSettings,
     updateSetting,

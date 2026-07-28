@@ -5,7 +5,7 @@
    network-first (with cache fallback) for third-party CDN assets.
    ========================================================================== */
 
-const CACHE_VERSION = 'etp-v2';
+const CACHE_VERSION = 'etp-v3';
 const APP_SHELL = [
   './',
   './index.html',
@@ -32,19 +32,12 @@ const APP_SHELL = [
   './js/settings.js',
   './js/export.js',
   './pages/dashboard.html',
-  './pages/dashboard',
   './pages/transactions.html',
-  './pages/transactions',
   './pages/analytics.html',
-  './pages/analytics',
   './pages/reports.html',
-  './pages/reports',
   './pages/categories.html',
-  './pages/categories',
   './pages/settings.html',
-  './pages/settings',
   './pages/about.html',
-  './pages/about',
   './assets/favicon/icon-192.png',
   './assets/favicon/icon-512.png',
 ];
@@ -75,9 +68,14 @@ self.addEventListener('fetch', (event) => {
   const sameOrigin = url.origin === self.location.origin;
 
   if (sameOrigin) {
+    let cacheKey = request;
+    if (url.pathname.includes('/pages/') && !url.pathname.endsWith('.html') && !url.pathname.endsWith('/')) {
+       cacheKey = new Request(url.pathname + '.html');
+    }
     // Cache-first for our own app shell files
     event.respondWith(
-      caches.match(request).then((cached) => {
+      caches.match(cacheKey).then((cached) => {
+
         if (cached) return cached;
         return fetch(request)
           .then((response) => {

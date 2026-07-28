@@ -137,9 +137,14 @@
   <script>
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone || (window.Capacitor && window.Capacitor.isNative);
     if (isStandalone) {
-      window.location.replace('pages/dashboard');
+      const isCap = window.Capacitor && window.Capacitor.isNative;
+      window.location.replace(isCap ? 'pages/dashboard.html' : 'pages/dashboard');
     }
   </script>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2563EB">
+<link rel="apple-touch-icon" href="assets/favicon/icon-192.png">
 </head>
 <body>
 
@@ -276,5 +281,6 @@
     step();
   })();
 </script>
+<script src="js/pwa.js"></script>
 </body>
 </html>

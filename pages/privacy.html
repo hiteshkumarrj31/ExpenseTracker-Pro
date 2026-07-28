@@ -63,6 +63,10 @@
   }
 }
 </script>
+
+<link rel="manifest" href="../manifest.json">
+<meta name="theme-color" content="#2563EB">
+<link rel="apple-touch-icon" href="../assets/favicon/icon-192.png">
 </head>
 <body>
 
@@ -107,5 +111,6 @@
 <script>
   document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 </script>
+<script src="../js/pwa.js"></script>
 </body>
 </html>

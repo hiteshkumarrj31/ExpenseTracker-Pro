@@ -135,28 +135,21 @@
 
   <!-- Standalone App Redirect -->
   <script>
-    function redirectIfStandalone() {
+    function redirectToDashboard() {
       const isGitHub = location.hostname.includes('github.io');
-      const isPWA = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-      const isCapacitor = (typeof window.Capacitor !== 'undefined') || !isGitHub; // If not GitHub, assume Capacitor/Local
+      const useHtmlExt = !isGitHub; // Only drop .html on GitHub Pages
+      const dest = useHtmlExt ? 'pages/dashboard.html' : 'pages/dashboard';
       
-      if (isPWA || isCapacitor) {
-        const useHtmlExt = !isGitHub; // Only drop .html on GitHub Pages
-        const dest = useHtmlExt ? 'pages/dashboard.html' : 'pages/dashboard';
-        
-        // Check if we are currently on the index page
-        const path = location.pathname;
-        if (path.endsWith('index.html') || path.endsWith('/') || path === '') {
-           // Prevent infinite loops if Capacitor fallback happened
-           if (!path.includes('dashboard')) {
-               window.location.replace(dest);
-           }
-        }
+      const path = location.pathname;
+      if (path.endsWith('index.html') || path.endsWith('/') || path === '') {
+         if (!path.includes('dashboard')) {
+             window.location.replace(dest);
+         }
       }
     }
-    redirectIfStandalone();
-    document.addEventListener("DOMContentLoaded", redirectIfStandalone);
-    setTimeout(redirectIfStandalone, 500);
+    redirectToDashboard();
+    document.addEventListener("DOMContentLoaded", redirectToDashboard);
+    setTimeout(redirectToDashboard, 200);
   </script>
 
 <link rel="manifest" href="manifest.json">
